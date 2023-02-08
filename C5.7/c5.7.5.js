@@ -1,7 +1,14 @@
 const btn = document.querySelector('button');
 const input1 = document.querySelector('.page');
 const input2 = document.querySelector('.limit');
-const resultNode = document.querySelector('.result')
+const resultNode = document.querySelector('.result');
+
+document.addEventListener("DOMContentLoaded", () => {
+    storageItem = localStorage.getItem('lastResponse')
+    if (storageItem) {
+        showResult(JSON.parse(storageItem));
+    }
+});
 
 function showError(msg) {
     elem = document.createElement('p');
@@ -21,7 +28,7 @@ const useRequest = (page, limit) => {
             return result;
         })
         .catch(() => {
-            console.log('error')
+            console.log('error');
         });
 }
 
@@ -58,6 +65,7 @@ btn.addEventListener('click', async () => {
     }
     if (!pageError && !limitError) {
         const requestResult = await useRequest(page, limit);
-        showResult(requestResult)
+        localStorage.setItem('lastResponse', JSON.stringify(requestResult));
+        showResult(requestResult);
     }
 })
